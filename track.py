@@ -14,8 +14,6 @@ if len(sys.argv) < 2:
 
 
 def save_session():
-	print('ftimes: ' + str(focus_times))
-
 	save_file = os.path.join(save_dir, project_name + '_times.json')
 	
 	all_times =  {}
@@ -29,10 +27,13 @@ def save_session():
 
 	all_times[start] = {}
 
-	focus_times['end_time'] = str(t.time())
-	all_times[start] = focus_times
+	session_dict['end_time'] = str(t.time())
+	session_dict['description'] = description
+	all_times[start] = session_dict
 
-	print('alltimes: ' + str(all_times))
+
+	print('now its' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+	print( 'so this was ' + str(datetime.timedelta(seconds= float(session_dict['end_time']) - float(start) )) )
 	
 	f = open(save_file, 'w+')
 	json.dump(all_times, f, indent=4)
@@ -62,10 +63,13 @@ if not os.path.exists(save_dir):
 
 
 start = str(t.time())
-focus_times = {}
+session_dict = {}
+session_dict['focus_times'] = {}
+focus_times = session_dict['focus_times']
 
 running=True
 
+print('started at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
 while(running):
 	
 	window = display.get_input_focus().focus
@@ -86,14 +90,16 @@ while(running):
 			focus_times[wmname]['time'] = interval
 		else:
 			focus_times[wmname]['time'] += interval
-	print(focus_times)
+	#print(focus_times)
 
 
 	try:
 		t.sleep(interval)
 	except KeyboardInterrupt:
-		print('got interrupt')
 		running=False
+
+description = input("\nif you want you can save a description of what you have done: ")
+
 
 save_session()
 

@@ -3,6 +3,7 @@ import datetime
 import sys
 import os
 import json
+import time
 
 save_dir = 'saves'
 
@@ -21,7 +22,7 @@ if os.path.isfile(save_file):
 	f = open(save_file, 'r')
 	try:
 		all_times = json.loads(f.read())
-		print(all_times)
+		
 	except ValueError:
 		print('value error while reading json file')
 		exit(0)
@@ -30,6 +31,24 @@ if os.path.isfile(save_file):
 
 if not all_times:
 	exit(0)
+print("your stats for " + sys.argv[1])
+print()
+whole_time = 0
 
-for key in all_times:
-	print(datetime.datetime.fromtimestamp(float(key)))
+for key in all_times.keys():
+	print(all_times[key])
+	start_time = datetime.datetime.fromtimestamp(float(key))
+	start_time_readable = start_time.strftime("%Y-%m-%d %H:%M")
+	end_time = datetime.datetime.fromtimestamp(float(all_times[key].get('end_time', None)))
+	end_time_readable = end_time.strftime("%Y-%m-%d %H:%M")
+
+	diff = datetime.timedelta(seconds=(float(all_times[key].get('end_time', None)) - float(key)))
+	whole_time += (float(all_times[key].get('end_time', None)) - float(key))
+	print('Session: (' + humanize.naturalday(start_time) + ') ')
+	if all_times[key].get('description', None):
+		print('description: ' + all_times[key].get('description', None))
+	print( str(start_time_readable) + ' - ' + end_time_readable)
+	print('duration: ' +  str(diff) + 's')
+	print()
+	
+print('whole time spent on this project: ' + str(datetime.timedelta(seconds=whole_time)))
