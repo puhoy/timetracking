@@ -54,17 +54,19 @@ for key in all_times.keys():
 	diff = float(all_times[key].get('end_time', None)) - float(key)
 	diff_datetime = datetime.timedelta(seconds=diff)
 	whole_time += (float(all_times[key].get('end_time', None)) - float(key))
-	print('Session: (' + humanize.naturalday(start_time) + ') ')
+	print('Session: (' + humanize.naturalday(start_time) + ') ' + ' duration: ' +  str(diff_datetime) + 's')
+	
+	print( str(start_time_readable) + ' - ' + end_time_readable)
+
 	if all_times[key].get('description', None):
-		print('description: ' + all_times[key].get('description', None))
+		print(' description: ' + all_times[key].get('description', None))
 
 	perc_act = percentage_activity(all_times[key].get('focus_times'), diff)
 
 	for wmname in perc_act.keys():
-		print(str(round(perc_act[wmname], 2)) + "% - " + wmname[:15])
+		print('  ' + str(round(perc_act[wmname], 2)) + "% - " + wmname[:15])
 	
-	print( str(start_time_readable) + ' - ' + end_time_readable)
-	print('duration: ' +  str(diff_datetime) + 's')
+	
 	print()
 	
 print('whole time spent on this project: ' + str(datetime.timedelta(seconds=whole_time)))
