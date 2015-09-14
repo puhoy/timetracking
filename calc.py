@@ -6,8 +6,12 @@ import json
 import time
 
 
-def percentage_activity(focus_activity, sum_time):
+def percentage_activity(focus_activity):
 	time_percentage = {}
+	sum_time = 0
+
+	for wmname in focus_activity.keys():
+		sum_time += focus_activity[wmname].get('time')
 
 	for wmname in focus_activity.keys():
 		time_percentage[wmname] = float(focus_activity[wmname].get('time')) * 100 / sum_time
@@ -61,10 +65,10 @@ for key in all_times.keys():
 	if all_times[key].get('description', None):
 		print(' description: ' + all_times[key].get('description', None))
 
-	perc_act = percentage_activity(all_times[key].get('focus_times'), diff)
+	perc_act = percentage_activity(all_times[key].get('focus_times'))
 
 	for wmname in perc_act.keys():
-		print('  ' + str(round(perc_act[wmname], 2)) + "% - " + wmname[:15])
+		print('  ' + str(round(perc_act[wmname], 2)) + "% - " + wmname[:25])
 	
 	
 	print()

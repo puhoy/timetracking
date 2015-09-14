@@ -71,29 +71,29 @@ running=True
 
 print('started at ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
 while(running):
-	
-	window = display.get_input_focus().focus
-	#print(window)
-	wmname = window.get_wm_name()
-	wmclass = window.get_wm_class()
-
-	if wmclass is None and wmname is None:#
-		window = window.query_tree().parent
-		wmname = window.get_wm_name()
-
-	if wmname:
-		if not focus_times.get(wmname, None):
-			focus_times[wmname] = {}
-
-		time = focus_times[wmname].get('time', None)
-		if not time:
-			focus_times[wmname]['time'] = interval
-		else:
-			focus_times[wmname]['time'] += interval
-	#print(focus_times)
-
-
 	try:
+		window = display.get_input_focus().focus
+		#print(window)
+		wmname = window.get_wm_name()
+		wmclass = window.get_wm_class()
+
+		if wmclass is None and wmname is None:#
+			window = window.query_tree().parent
+			wmname = window.get_wm_name()
+
+		if wmname:
+			if not focus_times.get(wmname, None):
+				focus_times[wmname] = {}
+
+			time = focus_times[wmname].get('time', None)
+			if not time:
+				focus_times[wmname]['time'] = interval
+			else:
+				focus_times[wmname]['time'] += interval
+		#print(focus_times)
+
+
+	
 		t.sleep(interval)
 	except KeyboardInterrupt:
 		running=False
